@@ -18,6 +18,7 @@ im=imresize(im,[128 128]);
  r_channel=im(:,:,1);
  b_channel=im(:,:,2);
  g_channel=im(:,:,3);
+
  %denoise each channel
  r_channel=medfilt2(r_channel);
  g_channel=medfilt2(g_channel);
@@ -26,9 +27,13 @@ im=imresize(im,[128 128]);
  rgbim(:,:,1)=r_channel;
  rgbim(:,:,2)=g_channel;        
  rgbim(:,:,3)=b_channel;
+  r_channel=rgbim(:,:,1);
+ b_channel=rgbim(:,:,2);
+ g_channel=rgbim(:,:,3);
  %featureextraction
 fet=totalfeature(rgbim);
 load db;
+load jolly1;
 k=length(currency);
 %disp(currency(1).feature);
 for j=1:k
@@ -90,7 +95,7 @@ q1=cat(1,q(i).Solidity);
      %fprintf('suma');
      % disp(value2);
         if(j==4)
-            disp(i);
+          %  disp(i);
             c1=1;
             continue;
         end
@@ -99,8 +104,8 @@ q1=cat(1,q(i).Solidity);
             end
       j2=j;
       k1=1;
-     disp(i);
-      disp(j2);
+    % disp(i);
+     % disp(j2);
       break;
   end
   if(k1==1)
@@ -112,13 +117,15 @@ end
       break;
   end
 end
-
+den = -1;
+load Denominations;
 if((c1==1&&c2==1)||(c1==1&&j2==-1)||(c2==1&&j2==-1))
     j2=-2;
     fprintf('Recognised Currency is Dollar');
 end
 if(j2==2||j2==3)
-    fprintf('Recognised Currency is rupee'); 
+    den=1;
+    fprintf('Recognised Currency is rupee');     
 end
 if(j2==1)
     fprintf('Recognised Currency is Pound');
@@ -131,7 +138,32 @@ if value>0.001
 else
     disp('no matches found');
 end
+
 end
+values = size(denomination(den).values);
+for i=1:values;
+    red = mean(r_channel(:))-denomination(den).values(i,2);
+    if(red<0) 
+        red=red*-1;
+    end
+    green = mean(g_channel(:))-denomination(den).values(i,3);
+    if(green<0) 
+        green=green*-1;
+    end
+    blue = mean(b_channel(:))-denomination(den).values(i,4);
+    if(blue<0) 
+        blue=blue*-1;
+    end
+if(red<3&&blue<3&&green<3)
+    disp(denomination(den).values(i,1));
+end
+
+end
+
+    %disp(den)
+    %disp(mean(r_channel(:)));
+    %disp(denomination(1).values(1,2));
+
 %disp(x(2,1));
 %disp(x(2,2));
 %disp(x(2,3));

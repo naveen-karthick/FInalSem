@@ -14,7 +14,9 @@ Z=xyzI(:,:,3);
 warning('off');
 luvTransformation = makecform('xyz2uvl');
 luvI = applycform(xyzI,luvTransformation);
-
+%disp(mean(X(:)));
+%disp(mean(Y(:)));
+%disp(mean(Z(:)));
 %figure,imshow(luvI,'initialmagnification','fit');
 %seperate l,u,v
 L=luvI(:,:,1);
