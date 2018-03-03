@@ -8,6 +8,8 @@
 %% clear workspace and command window
 clear;clc;
 %% read image
+
+for i =1:4
 [imname,impath]=uigetfile({'*.jpg;*.png'});
 im=imread([impath,'/',imname]);
 %preprocessing
@@ -30,6 +32,12 @@ im=imresize(im,[128 128]);
   r_channel=rgbim(:,:,1);
  b_channel=rgbim(:,:,2);
  g_channel=rgbim(:,:,3);
+dominantRedValue = mean2(rgbim(:, :, 1));
+dominantGreenValue = mean2(rgbim(:, :, 2));
+dominantBlueValue = mean2(rgbim(:, :, 3));
+disp(dominantRedValue);
+disp(dominantGreenValue);
+disp(dominantBlueValue);
  %featureextraction
 fet=totalfeature(rgbim);
 load db;
@@ -121,6 +129,7 @@ den = -1;
 load Denominations;
 if((c1==1&&c2==1)||(c1==1&&j2==-1)||(c2==1&&j2==-1))
     j2=-2;
+    den=2;
     fprintf('Recognised Currency is Dollar');
 end
 if(j2==2||j2==3)
@@ -128,11 +137,22 @@ if(j2==2||j2==3)
     fprintf('Recognised Currency is rupee');     
 end
 if(j2==1)
+    den=3;
     fprintf('Recognised Currency is Pound');
 end
 if(j2==-1)
 if value>0.001
    currency_name=currency(index).name;
+   if(index==3) 
+       den =1;
+   end
+     if(index==2) 
+       den =3; 
+     end
+      if(index==1) 
+       den =2; 
+      end
+   den=index;
    fprintf('recognized currency is : ');
    disp(currency_name)
 else
@@ -154,18 +174,8 @@ for i=1:values;
     if(blue<0) 
         blue=blue*-1;
     end
-if(red<3&&blue<3&&green<3)
+if((red<5&&blue<5&&green<5))
     disp(denomination(den).values(i,1));
 end
-
 end
-
-    %disp(den)
-    %disp(mean(r_channel(:)));
-    %disp(denomination(1).values(1,2));
-
-%disp(x(2,1));
-%disp(x(2,2));
-%disp(x(2,3));
-%    disp(x(2,4));
-    
+end
