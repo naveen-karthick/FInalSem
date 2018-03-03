@@ -1,9 +1,3 @@
-% % Program for Currency recognition
-
-% Author        : Arun Kumar
-% Email         : mail.drgkumar@gmail.com
-% Version       : 1.0
-% Date          :7/4/2014
 
 %% clear workspace and command window
 clear;clc;
